@@ -38,6 +38,8 @@ var cantidadcolores = div.length;
 for (i = 0; i < cantidadcolores; i++) {
   div[i].addEventListener("click", setColor);
 }
+//usar el color seleccionado en mi paleta
+pintar();
 
 colorPersonalizado.addEventListener('change',
   (function () {
@@ -87,17 +89,32 @@ function agregarPixel() {
 };
 
 //funcion para pintar pixeles en la grilla
-function pintarPixel(fila, columna, color) {
-  grillaPixeles[fila, columna].style.backgroundColor = color;
+function pintarPixel(e) {
+  var divGrilla = e.target;
+  console.log(divGrilla);
+  var indicadorColor = document.getElementById("indicador-de-color");
+  var indicadorStyle = window.getComputedStyle(indicadorColor);
+  var colorPaleta = indicadorStyle.backgroundColor;
+  console.log(colorPaleta);
+  divGrilla.style.backgroundColor = colorPaleta;
 };
+
+function pintar() {
+  filas = obtenerNumeroDeFilasGrilla();
+  columnas = obtenerNumeroDeColumnasGrilla();
+  //var colorRueda = document.getElementById("indicador-de-color");
+  for (i = 0; i < filas; i++) {
+    for (j = 0; j < columnas; j++) {
+      grillaPixeles.addEventListener("click", pintarPixel)
+    }
+  }
+}
 
 
 //setear color elegido
 function setColor(e) {
-  console.log("click!");
   var estiloDiv = window.getComputedStyle(e.target);
   var colorSeleccionado = estiloDiv.backgroundColor;
-  console.log("colorSeleccionado: " + colorSeleccionado);
   var indicador = document.getElementById("indicador-de-color");
   indicador.style.backgroundColor = colorSeleccionado;
 }
