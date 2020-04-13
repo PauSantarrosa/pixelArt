@@ -41,8 +41,6 @@ colorPersonalizado.addEventListener('change',
     // Se guarda el color de la rueda en colorActual
     colorActual = colorPersonalizado.value;
     // Completar para que cambie el indicador-de-color al colorActual
-    //var indicadorRueda = document.getElementById("color-personalizado");
-
 
   })
 );
@@ -58,17 +56,26 @@ function paletaDeColores(color) {
   return divColor;
 };
 
-//funcion para crear la grilla de pixels
-function agregarPixel() {
+function obtenerNumeroDeColumnasGrilla(){
+   //obtengo las medidas definidas por css para la grilla
+   var estiloGrilla = window.getComputedStyle(grillaPixeles);
+   var columnas = estiloGrilla.width;
+   //obtengo el valor numerico de las medidas en pixels para poder agregar los div
+   columnas = columnas.substr(0, columnas.search("px"));
+}
+
+function obtenerNumeroDeFilasGrilla(){
   //obtengo las medidas definidas por css para la grilla
   var estiloGrilla = window.getComputedStyle(grillaPixeles);
-  var ancho = estiloGrilla.width;
-  var altura = estiloGrilla.height;
+  var filas = estiloGrilla.height;
   //obtengo el valor numerico de las medidas en pixels para poder agregar los div
-  ancho = ancho.substr(0, ancho.search("px"));
-  altura = altura.substr(0, altura.search("px"));
-  for (i = 0; i < altura; i++) {
-    for (j = 0; j < ancho; j++) {
+  filas = filas.substr(0, filas.search("px"));
+}
+
+//funcion para crear la grilla de pixels
+function agregarPixel(filas,columnas) {
+for (i = 0; i < filas; i++) {
+    for (j = 0; j < columnas; j++) {
       grillaPixeles.appendChild(document.createElement('div'));
     }
   }
