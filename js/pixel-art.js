@@ -26,15 +26,18 @@ var colorPersonalizado = document.getElementById('color-personalizado');
 var paleta = document.getElementById('paleta');
 var grillaPixeles = document.getElementById('grilla-pixeles');
 
+//lleno la paleta de colores
 nombreColores.forEach(paletaDeColores);
+
+//agrego los pixeles a la grilla
 agregarPixel();
-//setear evento click en cada div
+
+//setear evento click en cada div de la paleta de colores
 var div = document.getElementsByClassName("color-paleta");
 var cantidadcolores = div.length;
 for (i = 0; i < cantidadcolores; i++) {
   div[i].addEventListener("click", setColor);
 }
-
 
 colorPersonalizado.addEventListener('change',
   (function () {
@@ -44,7 +47,6 @@ colorPersonalizado.addEventListener('change',
 
   })
 );
-
 
 //funcion para crear la paleta de colores
 function paletaDeColores(color) {
@@ -56,30 +58,39 @@ function paletaDeColores(color) {
   return divColor;
 };
 
-function obtenerNumeroDeColumnasGrilla(){
-   //obtengo las medidas definidas por css para la grilla
-   var estiloGrilla = window.getComputedStyle(grillaPixeles);
-   var columnas = estiloGrilla.width;
-   //obtengo el valor numerico de las medidas en pixels para poder agregar los div
-   columnas = columnas.substr(0, columnas.search("px"));
+function obtenerNumeroDeColumnasGrilla() {
+  //obtengo las medidas definidas por css para la grilla
+  var estiloGrilla = window.getComputedStyle(grillaPixeles);
+  var columnas = estiloGrilla.width;
+  //obtengo el valor numerico de las medidas en pixels para poder agregar los div
+  return Number(columnas.substr(0, columnas.search("px")));
 }
 
-function obtenerNumeroDeFilasGrilla(){
+function obtenerNumeroDeFilasGrilla() {
   //obtengo las medidas definidas por css para la grilla
   var estiloGrilla = window.getComputedStyle(grillaPixeles);
   var filas = estiloGrilla.height;
   //obtengo el valor numerico de las medidas en pixels para poder agregar los div
-  filas = filas.substr(0, filas.search("px"));
+  return Number(filas.substr(0, filas.search("px")));
+
 }
 
 //funcion para crear la grilla de pixels
-function agregarPixel(filas,columnas) {
-for (i = 0; i < filas; i++) {
+function agregarPixel() {
+  filas = obtenerNumeroDeFilasGrilla();
+  columnas = obtenerNumeroDeColumnasGrilla();
+  for (i = 0; i < filas; i++) {
     for (j = 0; j < columnas; j++) {
       grillaPixeles.appendChild(document.createElement('div'));
     }
   }
 };
+
+//funcion para pintar pixeles en la grilla
+function pintarPixel(fila, columna, color) {
+  grillaPixeles[fila, columna].style.backgroundColor = color;
+};
+
 
 //setear color elegido
 function setColor(e) {
