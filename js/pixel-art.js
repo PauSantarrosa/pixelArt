@@ -23,13 +23,64 @@ var nombreColores = ['White', 'LightYellow',
 // Variable para guardar el elemento 'color-personalizado'
 // Es decir, el que se elige con la rueda de color.
 var colorPersonalizado = document.getElementById('color-personalizado');
+var paleta = document.getElementById('paleta');
+var grillaPixeles = document.getElementById('grilla-pixeles');
 
-colorPersonalizado.addEventListener('change', 
-  (function() {
+nombreColores.forEach(paletaDeColores);
+agregarPixel();
+//setear evento click en cada div
+var div = document.getElementsByClassName("color-paleta");
+var cantidadcolores = div.length;
+for (i = 0; i < cantidadcolores; i++) {
+  div[i].addEventListener("click", setColor);
+}
+
+
+colorPersonalizado.addEventListener('change',
+  (function () {
     // Se guarda el color de la rueda en colorActual
     colorActual = colorPersonalizado.value;
     // Completar para que cambie el indicador-de-color al colorActual
+    //var indicadorRueda = document.getElementById("color-personalizado");
 
 
   })
 );
+
+
+//funcion para crear la paleta de colores
+function paletaDeColores(color) {
+  var divColor = document.createElement('div');
+  divColor.className = "color-paleta";
+  var estilo = divColor.style;
+  estilo.background = color;
+  paleta.appendChild(divColor);
+  return divColor;
+};
+
+//funcion para crear la grilla de pixels
+function agregarPixel() {
+  //obtengo las medidas definidas por css para la grilla
+  var estiloGrilla = window.getComputedStyle(grillaPixeles);
+  var ancho = estiloGrilla.width;
+  var altura = estiloGrilla.height;
+  //obtengo el valor numerico de las medidas en pixels para poder agregar los div
+  ancho = ancho.substr(0, ancho.search("px"));
+  altura = altura.substr(0, altura.search("px"));
+  for (i = 0; i < altura; i++) {
+    for (j = 0; j < ancho; j++) {
+      grillaPixeles.appendChild(document.createElement('div'));
+    }
+  }
+};
+
+//setear color elegido
+function setColor(e) {
+  console.log("click!");
+  var estiloDiv = window.getComputedStyle(e.target);
+  var colorSeleccionado = estiloDiv.backgroundColor;
+  console.log("colorSeleccionado: " + colorSeleccionado);
+  var indicador = document.getElementById("indicador-de-color");
+  indicador.style.backgroundColor = colorSeleccionado;
+}
+
