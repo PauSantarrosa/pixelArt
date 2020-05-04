@@ -52,7 +52,7 @@ $(grillaPixeles).mousedown(function () {
   mousedown = true;
 });
 
-$(grillaPixeles).mousedup(function () {
+$(grillaPixeles).mouseup(function () {
   mousedown = false;
 });
 
