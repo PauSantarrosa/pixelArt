@@ -33,20 +33,79 @@ nombreColores.forEach(paletaDeColores);
 agregarPixel();
 
 //setear evento click en cada div de la paleta de colores
-var div = document.getElementsByClassName("color-paleta");
+//DOM JS: var div = document.getElementsByClassName("color-paleta");
+//div[i].addEventListener("click", setColor);
+//***** con jquery ******************//
+var div = $(".color-paleta");
 var cantidadcolores = div.length;
 for (i = 0; i < cantidadcolores; i++) {
-  div[i].addEventListener("click", setColor);
+  //con jquery
+  $(div[i]).click(setColor);
 }
-//usar el color seleccionado en mi paleta
+
+//pintar con clicks
 pintar();
+
+var mousedown = false;
+//****************+CON JQUERY **********************//
+$(grillaPixeles).mousedown(function () {
+  mousedown = true;
+});
+
+$(grillaPixeles).mousedup(function () {
+  mousedown = false;
+});
+
+/* DOM: 
+grillaPixeles.addEventListener("mousedown", function () {
+  mousedown = true;
+});
+grillaPixeles.addEventListener("mouseup", function () {
+  mousedown = false;
+}); */
+grillaPixeles.addEventListener("mouseover", function (e) {
+
+  var divGrilla = e.target;
+  if (mousedown) {
+    console.log("pintar");
+    var indicadorColor = document.getElementById("indicador-de-color");
+    var indicadorStyle = window.getComputedStyle(indicadorColor);
+    var colorPaleta = indicadorStyle.backgroundColor;
+    divGrilla.style.backgroundColor = colorPaleta;
+  } else {
+    console.log("no pintar");
+    mousedown = false;
+  }
+});
+
+/* grillaPixeles.addEventListener("mouseover",function(e){
+  var divGrilla = e.target;
+  if(mousedown){
+    console.log("pintar");
+    var divGrilla = e.target;
+    var indicadorColor = document.getElementById("indicador-de-color");
+    var indicadorStyle = window.getComputedStyle(indicadorColor);
+    var colorPaleta = indicadorStyle.backgroundColor;
+    divGrilla.style.backgroundColor = colorPaleta;
+    }else{
+      console.log("no hago nada");
+      mousedown = false;
+    
+  }
+}); */
+
+
 
 colorPersonalizado.addEventListener('change',
   (function () {
     // Se guarda el color de la rueda en colorActual
     colorActual = colorPersonalizado.value;
-    // Completar para que cambie el indicador-de-color al colorActual
-
+    //Completar para que cambie el indicador-de-color al colorActual
+    //con jquery: 
+    $("#indicador-de-color").css("background-color", colorActual);
+    /* DOM: var indicadorColor = document.getElementById("indicador-de-color");
+       styleIndicador = indicadorColor.style;
+       styleIndicador.backgroundColor = colorActual; */
   })
 );
 
@@ -58,6 +117,12 @@ function paletaDeColores(color) {
   estilo.background = color;
   paleta.appendChild(divColor);
   return divColor;
+  //con jquery
+  //var divColor =  $(paleta).html("<div></div>");
+  // divColor.attr("className","color-paleta");
+  //divColor.attr("background-color",color);
+  // paleta.appendChild(divColor);
+  return divColor;
 };
 
 function obtenerNumeroDeColumnasGrilla() {
@@ -66,7 +131,7 @@ function obtenerNumeroDeColumnasGrilla() {
   var columnas = estiloGrilla.width;
   //obtengo el valor numerico de las medidas en pixels para poder agregar los div
   return Number(columnas.substr(0, columnas.search("px")));
-}
+};
 
 function obtenerNumeroDeFilasGrilla() {
   //obtengo las medidas definidas por css para la grilla
@@ -75,7 +140,7 @@ function obtenerNumeroDeFilasGrilla() {
   //obtengo el valor numerico de las medidas en pixels para poder agregar los div
   return Number(filas.substr(0, filas.search("px")));
 
-}
+};
 
 //funcion para crear la grilla de pixels
 function agregarPixel() {
@@ -91,31 +156,37 @@ function agregarPixel() {
 //funcion para pintar pixeles en la grilla
 function pintarPixel(e) {
   var divGrilla = e.target;
-  console.log(divGrilla);
   var indicadorColor = document.getElementById("indicador-de-color");
   var indicadorStyle = window.getComputedStyle(indicadorColor);
   var colorPaleta = indicadorStyle.backgroundColor;
-  console.log(colorPaleta);
   divGrilla.style.backgroundColor = colorPaleta;
 };
 
 function pintar() {
   filas = obtenerNumeroDeFilasGrilla();
   columnas = obtenerNumeroDeColumnasGrilla();
-  //var colorRueda = document.getElementById("indicador-de-color");
   for (i = 0; i < filas; i++) {
     for (j = 0; j < columnas; j++) {
-      grillaPixeles.addEventListener("click", pintarPixel)
+      grillaPixeles.addEventListener("click", pintarPixel);
     }
   }
-}
-
+};
 
 //setear color elegido
-function setColor(e) {
+function setColor(event) {
+  // ************ con jquery *********************************// 
+  //busco el color seleccionado
+  var $colorSeleccionado = $(event.target).css("background-color");
+  //seteo el color seleccionado en el pincel
+  $("#indicador-de-color").css("background-color", $colorSeleccionado);
+  /* DOM: 
   var estiloDiv = window.getComputedStyle(e.target);
   var colorSeleccionado = estiloDiv.backgroundColor;
   var indicador = document.getElementById("indicador-de-color");
-  indicador.style.backgroundColor = colorSeleccionado;
-}
+  indicador.style.backgroundColor = colorSeleccionado; */
+};
+
+
+
+
 
