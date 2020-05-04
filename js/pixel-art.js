@@ -56,14 +56,25 @@ $(grillaPixeles).mouseup(function () {
   mousedown = false;
 });
 
+$(grillaPixeles).mousemove(function (event) {
+  if (mousedown) {
+    console.log("pintar");
+    var $colorPaleta = $("#indicador-de-color").css("background-color");
+    $(event.target).css("background-color", $colorPaleta); 
+  }else {
+    console.log("no pintar");
+    mousedown = false;
+  }
+});
+
 /* DOM: 
 grillaPixeles.addEventListener("mousedown", function () {
   mousedown = true;
 });
 grillaPixeles.addEventListener("mouseup", function () {
   mousedown = false;
-}); */
-grillaPixeles.addEventListener("mouseover", function (e) {
+}); 
+grillaPixeles.addEventListener("mousemove", function (e) {
 
   var divGrilla = e.target;
   if (mousedown) {
@@ -76,7 +87,7 @@ grillaPixeles.addEventListener("mouseover", function (e) {
     console.log("no pintar");
     mousedown = false;
   }
-});
+});*/
 
 /* grillaPixeles.addEventListener("mouseover",function(e){
   var divGrilla = e.target;
@@ -103,6 +114,7 @@ colorPersonalizado.addEventListener('change',
     //Completar para que cambie el indicador-de-color al colorActual
     //con jquery: 
     $("#indicador-de-color").css("background-color", colorActual);
+    mousedown=false;
     /* DOM: var indicadorColor = document.getElementById("indicador-de-color");
        styleIndicador = indicadorColor.style;
        styleIndicador.backgroundColor = colorActual; */
@@ -111,32 +123,33 @@ colorPersonalizado.addEventListener('change',
 
 //funcion para crear la paleta de colores
 function paletaDeColores(color) {
-  var divColor = document.createElement('div');
+   //con jquery
+  var $divColor = $("<div></div>").attr({"class":"color-paleta" });
+  $($divColor).css("background-color",color);
+  $(paleta).append($divColor);
+  return $divColor;
+   /* var divColor = document.createElement('div');
   divColor.className = "color-paleta";
   var estilo = divColor.style;
   estilo.background = color;
   paleta.appendChild(divColor);
-  return divColor;
-  //con jquery
-  //var divColor =  $(paleta).html("<div></div>");
-  // divColor.attr("className","color-paleta");
-  //divColor.attr("background-color",color);
-  // paleta.appendChild(divColor);
-  return divColor;
+  return divColor; */
 };
 
 function obtenerNumeroDeColumnasGrilla() {
   //obtengo las medidas definidas por css para la grilla
-  var estiloGrilla = window.getComputedStyle(grillaPixeles);
-  var columnas = estiloGrilla.width;
+  var columnas = $(grillaPixeles).css("width");
+ 
+ /* DOM:  var estiloGrilla = window.getComputedStyle(grillaPixeles);
+  var columnas = estiloGrilla.width; */
   //obtengo el valor numerico de las medidas en pixels para poder agregar los div
   return Number(columnas.substr(0, columnas.search("px")));
 };
 
 function obtenerNumeroDeFilasGrilla() {
   //obtengo las medidas definidas por css para la grilla
-  var estiloGrilla = window.getComputedStyle(grillaPixeles);
-  var filas = estiloGrilla.height;
+  /* DOM: var estiloGrilla = window.getComputedStyle(grillaPixeles); */
+  var filas = $(grillaPixeles).css("height");
   //obtengo el valor numerico de las medidas en pixels para poder agregar los div
   return Number(filas.substr(0, filas.search("px")));
 
@@ -148,18 +161,21 @@ function agregarPixel() {
   columnas = obtenerNumeroDeColumnasGrilla();
   for (i = 0; i < filas; i++) {
     for (j = 0; j < columnas; j++) {
-      grillaPixeles.appendChild(document.createElement('div'));
+     $(grillaPixeles).append($("<div></div>"));
+      //grillaPixeles.appendChild(document.createElement('div'));
     }
   }
 };
 
 //funcion para pintar pixeles en la grilla
-function pintarPixel(e) {
-  var divGrilla = e.target;
+function pintarPixel(event) {
+  var $colorPaleta = $("#indicador-de-color").css("background-color");
+  $(event.target).css("background-color", $colorPaleta); 
+  /*DOM var divGrilla = e.target;
   var indicadorColor = document.getElementById("indicador-de-color");
   var indicadorStyle = window.getComputedStyle(indicadorColor);
   var colorPaleta = indicadorStyle.backgroundColor;
-  divGrilla.style.backgroundColor = colorPaleta;
+  divGrilla.style.backgroundColor = colorPaleta; */
 };
 
 function pintar() {
@@ -167,7 +183,7 @@ function pintar() {
   columnas = obtenerNumeroDeColumnasGrilla();
   for (i = 0; i < filas; i++) {
     for (j = 0; j < columnas; j++) {
-      grillaPixeles.addEventListener("click", pintarPixel);
+      $(grillaPixeles).click(pintarPixel);
     }
   }
 };
