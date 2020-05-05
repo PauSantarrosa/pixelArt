@@ -25,7 +25,9 @@ var nombreColores = ['White', 'LightYellow',
 var colorPersonalizado = document.getElementById('color-personalizado');
 var paleta = document.getElementById('paleta');
 var grillaPixeles = document.getElementById('grilla-pixeles');
-
+var totalFilas = 55;
+var totalColumnas = 32;
+var totalPixels = totalFilas * totalColumnas;
 //lleno la paleta de colores
 nombreColores.forEach(paletaDeColores);
 
@@ -59,9 +61,10 @@ $(grillaPixeles).mouseup(function () {
 $(grillaPixeles).mousemove(function (event) {
   if (mousedown) {
     console.log("pintar");
-    var $colorPaleta = $("#indicador-de-color").css("background-color");
-    $(event.target).css("background-color", $colorPaleta); 
-  }else {
+    pintarPixel(event);
+    /*   var $colorPaleta = $("#indicador-de-color").css("background-color");
+      $(event.target).css("background-color", $colorPaleta); */
+  } else {
     console.log("no pintar");
     mousedown = false;
   }
@@ -114,7 +117,7 @@ colorPersonalizado.addEventListener('change',
     //Completar para que cambie el indicador-de-color al colorActual
     //con jquery: 
     $("#indicador-de-color").css("background-color", colorActual);
-    mousedown=false;
+    mousedown = false;
     /* DOM: var indicadorColor = document.getElementById("indicador-de-color");
        styleIndicador = indicadorColor.style;
        styleIndicador.backgroundColor = colorActual; */
@@ -123,54 +126,50 @@ colorPersonalizado.addEventListener('change',
 
 //funcion para crear la paleta de colores
 function paletaDeColores(color) {
-   //con jquery
-  var $divColor = $("<div></div>").attr({"class":"color-paleta" });
-  $($divColor).css("background-color",color);
+  //con jquery
+  var $divColor = $("<div></div>").attr({ "class": "color-paleta" });
+  $($divColor).css("background-color", color);
   $(paleta).append($divColor);
   return $divColor;
-   /* var divColor = document.createElement('div');
-  divColor.className = "color-paleta";
-  var estilo = divColor.style;
-  estilo.background = color;
-  paleta.appendChild(divColor);
-  return divColor; */
+  /* var divColor = document.createElement('div');
+ divColor.className = "color-paleta";
+ var estilo = divColor.style;
+ estilo.background = color;
+ paleta.appendChild(divColor);
+ return divColor; */
 };
 
-function obtenerNumeroDeColumnasGrilla() {
+/*  function obtenerNumeroDeColumnasGrilla() {
   //obtengo las medidas definidas por css para la grilla
   var columnas = $(grillaPixeles).css("width");
  
- /* DOM:  var estiloGrilla = window.getComputedStyle(grillaPixeles);
-  var columnas = estiloGrilla.width; */
-  //obtengo el valor numerico de las medidas en pixels para poder agregar los div
-  return Number(columnas.substr(0, columnas.search("px")));
+ //DOM:  var estiloGrilla = window.getComputedStyle(grillaPixeles);
+ // var columnas = estiloGrilla.width; 
+//obtengo el valor numerico de las medidas en pixels para poder agregar los div
+return Number(columnas.substr(0, columnas.search("px")));
 };
 
-function obtenerNumeroDeFilasGrilla() {
+ function obtenerNumeroDeFilasGrilla() {
   //obtengo las medidas definidas por css para la grilla
-  /* DOM: var estiloGrilla = window.getComputedStyle(grillaPixeles); */
-  var filas = $(grillaPixeles).css("height");
+  // DOM: var estiloGrilla = window.getComputedStyle(grillaPixeles); 
+  var filas = $(grillaPixeles).css("height"); --> //ojo con esto aqui le erre porque cree 300.000 div!! 
+  estuvo mal basarme en esta propiedad para armar la grilla!
   //obtengo el valor numerico de las medidas en pixels para poder agregar los div
   return Number(filas.substr(0, filas.search("px")));
-
-};
+};  */
 
 //funcion para crear la grilla de pixels
 function agregarPixel() {
-  filas = obtenerNumeroDeFilasGrilla();
-  columnas = obtenerNumeroDeColumnasGrilla();
-  for (i = 0; i < filas; i++) {
-    for (j = 0; j < columnas; j++) {
-     $(grillaPixeles).append($("<div></div>"));
-      //grillaPixeles.appendChild(document.createElement('div'));
-    }
+  for (i = 0; i < totalPixels; i++) {
+    $(grillaPixeles).append($("<div></div>"));
+    //grillaPixeles.appendChild(document.createElement('div'));
   }
 };
 
 //funcion para pintar pixeles en la grilla
 function pintarPixel(event) {
   var $colorPaleta = $("#indicador-de-color").css("background-color");
-  $(event.target).css("background-color", $colorPaleta); 
+  $(event.target).css("background-color", $colorPaleta);
   /*DOM var divGrilla = e.target;
   var indicadorColor = document.getElementById("indicador-de-color");
   var indicadorStyle = window.getComputedStyle(indicadorColor);
@@ -179,12 +178,8 @@ function pintarPixel(event) {
 };
 
 function pintar() {
-  filas = obtenerNumeroDeFilasGrilla();
-  columnas = obtenerNumeroDeColumnasGrilla();
-  for (i = 0; i < filas; i++) {
-    for (j = 0; j < columnas; j++) {
-      $(grillaPixeles).click(pintarPixel);
-    }
+  for (i = 0; i < totalPixels; i++) {
+    $(grillaPixeles).click(pintarPixel);
   }
 };
 
@@ -201,6 +196,37 @@ function setColor(event) {
   var indicador = document.getElementById("indicador-de-color");
   indicador.style.backgroundColor = colorSeleccionado; */
 };
+
+$("#borrar").click(function () {
+  var divsGrilla = $("#grilla-pixeles div");
+  console.log(divsGrilla);
+  $(divsGrilla).each(function () {
+    $(this).animate({ "backgroundColor": "white" }, 5000);
+  });
+});
+
+$("ul.imgs li img").each(function () {
+  $(this).click(function () {
+    var superheroe = $(this).attr("id");
+    switch (superheroe) {
+      case "batman":
+        cargarSuperheroe(batman);
+        break;
+      case"wonder":
+      cargarSuperheroe(wonder);
+        break;
+      
+      case "flash":
+        cargarSuperheroe(flash);
+        break;
+      case "invisible":
+          cargarSuperheroe(invisible);
+          break;
+      default:        
+        break;
+    }
+  });
+});
 
 
 
