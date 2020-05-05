@@ -205,6 +205,7 @@ $("#borrar").click(function () {
   });
 });
 
+// evento para cargar imagen seleccionada en la grilla
 $("ul.imgs li img").each(function () {
   $(this).click(function () {
     var superheroe = $(this).attr("id");
@@ -212,20 +213,26 @@ $("ul.imgs li img").each(function () {
       case "batman":
         cargarSuperheroe(batman);
         break;
-      case"wonder":
-      cargarSuperheroe(wonder);
+      case "wonder":
+        cargarSuperheroe(wonder);
         break;
-      
+
       case "flash":
         cargarSuperheroe(flash);
         break;
       case "invisible":
-          cargarSuperheroe(invisible);
-          break;
-      default:        
+        cargarSuperheroe(invisible);
+        break;
+      default:
         break;
     }
   });
+});
+
+//evento para el boton Guardar 
+$("#guardar").click(function(){
+  console.log("click guardar");
+  guardarPixelArt();
 });
 
 
